@@ -17,20 +17,26 @@ if version >= 702
         call neobundle#begin(expand('$HOME/.vim/bundle'))
     endif
     
-    " originalrepos on github
+    """ Neobundle
     NeoBundle 'Shougo/neobundle.vim'
     
-    " Plugins
+    """ Plugins -> General
+    NeoBundle 'scrooloose/syntastic'
+    NeoBundle 'scrooloose/nerdtree'
+
+    """ Plugins -> Display
+    NeoBundle 'vim-scripts/Wombat'
+    NeoBundle 'vim-scripts/wombat256.vim'
+    NeoBundle 'Yggdroot/indentLine'
+
+    """ Plugins -> Unite
     "NeoBundle 'Shougo/unite.vim'
     "NeoBundle 'Shougo/vimproc'
     "NeoBundle 'Shougo/vimshell'
     "NeoBundle 'Shougo/neocomplcache'
-    NeoBundle 'scrooloose/syntastic'
-    NeoBundle 'scrooloose/nerdtree'
+    
+    """ Plugins -> Python
     "NeoBundle 'davidhalter/jedi-vim'
-    NeoBundle 'Yggdroot/indentLine'
-    NeoBundle 'vim-scripts/Wombat'
-    NeoBundle 'vim-scripts/wombat256.vim'
     
     call neobundle#end()
     
@@ -39,9 +45,9 @@ if version >= 702
     
     " Installation check.
     if neobundle#exists_not_installed_bundles()
-      echomsg 'Not installed bundles : ' .
+        echomsg 'Not installed bundles : ' .
             \ string(neobundle#get_not_installed_bundle_names())
-      echomsg 'Please execute ":NeoBundleInstall" command.'
+        echomsg 'Please execute ":NeoBundleInstall" command.'
     endif
 endif    
 
@@ -62,9 +68,12 @@ if has("gui_running")
     
     """cursor color
     if has('multi_byte_ime')
-      hi Cursor guifg=bg guibg=Yellow gui=NONE
-      hi CursorIM guifg=NONE guibg=Red gui=NONE
+        hi Cursor guifg=bg guibg=Yellow gui=NONE
+        hi CursorIM guifg=NONE guibg=Red gui=NONE
     endif
+
+    """ cursor
+    set cursorline
 endif
 
 "-------------------------------------------------------------------------
@@ -98,8 +107,6 @@ set laststatus=2
 set statusline=%<%F\ %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B)\ %l/%L(%P)%m
 "set statusline=[%L]\ %t\ %y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}%r%m%=%c:%l/%L
 
-""" cursor
-set cursorline
 
 """ sound 
 set noerrorbells
@@ -115,8 +122,8 @@ set iminsert=0
 set imsearch=0
 
 """ tab, indent
-set ts=4 sw=3
-set softtabstop=3
+set ts=4 sw=4
+set softtabstop=4
 set expandtab
 set smartindent
 set smarttab
@@ -135,14 +142,38 @@ set autoread
 set noswapfile
 set hidden
 
+""" vimgrep
+let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git'
+let Grep_Cygwin_Find = 1
+
+
 "-------------------------------------------------------------------------
 " Key Settings
 "---------------------------------------------------------------------------
+""" map leader
+let mapleader = ","
+let g:mapleader = ","
+
 """ general
 noremap j gj
 noremap k gk
 vnoremap j gj
 vnoremap k gk
+
+""" buffer switch
+map <C-l>    <ESC>:bn<CR>
+map <C-h>    <ESC>:bp<CR>
+
+""" multiwindow switch
+map <C-down>   <C-W>j
+map <C-up>     <C-W>k
+map <C-left>   <C-W>h
+map <C-right>  <C-W>l
+
+""" quickfix(vimgrep, make, etc...)
+au QuickfixCmdPost make,grep,grepadd,vimgrep copen
+map <C-j> <ESC>:cn<CR>
+map <C-k>   <ESC>:cp<CR>
 
 """ ctags
 let Tlist_WinWidth = 25
