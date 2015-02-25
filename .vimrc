@@ -34,6 +34,12 @@ if version >= 702
     """ Plugins -> Fuzzy access
     NeoBundle 'kien/ctrlp.vim'
 
+    """ Plugins -> Clojure
+    NeoBundle 'guns/vim-clojure-static'  "Clojure mode
+    "NeoBundle 'clojure-emacs/cider-nrepl'
+    "NeoBundle 'tpope/vim-fireplace'
+    "NeoBundle 'tpope/vim-leiningen'
+
     """ Plugins -> Not yet..
     "NeoBundle 'Shougo/unite.vim'
     "NeoBundle 'Shougo/vimproc'
