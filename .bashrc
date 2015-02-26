@@ -47,6 +47,20 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 
+
+##################################################
+# Git Settings
+##################################################
+if which git &>/dev/null; then
+    git config --global user.name "Yoichi Iwaki"
+    git config --global user.email "yoichiwo7@gmail.com"
+    git config --global color.ui auto
+    git config --global core.excludesfile ~/.gitignore
+    git config --global core.autocrlf false
+    git config --global core.editor vim
+fi
+
+
 ##################################################
 # Python Settings
 ##################################################
