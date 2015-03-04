@@ -4,10 +4,8 @@
 
 "-------------------------------------------------------------------------
 " Plugins (NeoBundle)
-"   - not Cygwin
 "   - vim version must be 7.2.051 or above
 "---------------------------------------------------------------------------
-"if !has("win32unix") && version >= 702
 if version >= 702
     set nocompatible               " Be iMproved
     filetype off                   " Required!
@@ -69,7 +67,9 @@ if has("gui_running")
     set guioptions-=T
     
     """ font
-    set guifont=Ricty_Diminished:h12:::cSHIFTJIS
+    if has("win32")
+        set guifont=Inconsolata:h12:cSHIFTJIS  " Use font-link for multibyte fonts
+    endif
     
     """cursor color
     if has('multi_byte_ime')
