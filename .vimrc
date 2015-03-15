@@ -34,6 +34,7 @@ if version >= 702
 
     """ Plugins -> Clojure
     NeoBundle 'guns/vim-clojure-static'  "Clojure mode
+    NeoBundle 'amdt/vim-niji'
     "NeoBundle 'clojure-emacs/cider-nrepl'
     "NeoBundle 'tpope/vim-fireplace'
     "NeoBundle 'tpope/vim-leiningen'
@@ -68,7 +69,7 @@ if has("gui_running")
     
     """ font
     if has("win32")
-        set guifont=Inconsolata:h12:cSHIFTJIS  " Use font-link for multibyte fonts
+        set guifont=Ricty_Diminished:h12:cSHIFTJIS  " Use font-link for multibyte fonts
     endif
     
     """cursor color
@@ -115,7 +116,6 @@ set formatoptions+=m
 """ status line
 set laststatus=2
 set statusline=%<%F\ %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B)\ %l/%L(%P)%m
-"set statusline=[%L]\ %t\ %y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}%r%m%=%c:%l/%L
 
 """ sound 
 set noerrorbells
@@ -220,7 +220,7 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 
