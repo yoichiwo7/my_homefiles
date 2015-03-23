@@ -7,8 +7,25 @@ case $- in
 esac
 
 ##################################################
+# Settings for Mac OS X
+##################################################
+if [ $(uname) = "Darwin" ]; then
+    # Homebrew PATH
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+    export MAHPATH=$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman
+    # Color settings
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+##################################################
 # General Settings
 ##################################################
+
+### PATH
+export PATH=~/bin:$PATH
 
 ### History
 # don't put duplicate lines or lines starting with space in the history.
@@ -72,3 +89,4 @@ if [ -d "${PYENV_ROOT}" ]; then
     eval "$(pyenv virtualenv-init -)"
 
 fi
+

@@ -35,8 +35,9 @@ if version >= 702
     """ Plugins -> Clojure
     NeoBundle 'guns/vim-clojure-static'  "Clojure mode
     NeoBundle 'amdt/vim-niji'
-    "NeoBundle 'clojure-emacs/cider-nrepl'
-    "NeoBundle 'tpope/vim-fireplace'
+    NeoBundle 'clojure-emacs/cider-nrepl'
+    NeoBundle 'tpope/vim-fireplace'
+    NeoBundle 'tpope/vim-classpath'
     "NeoBundle 'tpope/vim-leiningen'
 
     """ Plugins -> Not yet..
@@ -147,6 +148,7 @@ set noswapfile
 set hidden
 
 """ vimgrep
+set wildignore=*.o,*.obj,*.exe,*.class,*.jar,*.zip,*.gz,*.bz2
 let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git'
 let Grep_Cygwin_Find = 1
 
