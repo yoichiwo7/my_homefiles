@@ -1,21 +1,25 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " .vimrc (yoichiwo7)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 "-------------------------------------------------------------------------
-" Plugins (NeoBundle)
-"   - vim version must be 7.2.051 or above
+" Plugins (managing via NeoBundle)
+"   - vim7.2.051 or above
 "---------------------------------------------------------------------------
 if version >= 702
     set nocompatible               " Be iMproved
     filetype off                   " Required!
     
     if has('vim_starting')
+        if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
+            " Auto install Neobudle
+            echo "auto-install neobundle..."
+            :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
+        endif
         set runtimepath+=$HOME/.vim/bundle/neobundle.vim
         call neobundle#begin(expand('$HOME/.vim/bundle'))
     endif
     
-    """ Neobundle
+    """ Neobundle(Base)
     NeoBundle 'Shougo/neobundle.vim'
     
     """ Plugins -> Filer
@@ -27,24 +31,26 @@ if version >= 702
     """ Plugins -> Display
     NeoBundle 'vim-scripts/Wombat'
     NeoBundle 'vim-scripts/wombat256.vim'
-    NeoBundle 'Yggdroot/indentLine'
 
     """ Plugins -> Fuzzy access
     NeoBundle 'kien/ctrlp.vim'
 
+    """ Plugins -> Version Control
+    NeoBundle 'tpope/vim-fugitive'             "Git
+
+    """ Plugins -> Source Navigation
+    NeoBundle 'vim-scripts/gtags.vim'          "GLOBAL
+    NeoBundle 'mileszs/ack.vim'                "App::Ack
+
     """ Plugins -> Clojure
-    NeoBundle 'guns/vim-clojure-static'  "Clojure mode
-    NeoBundle 'amdt/vim-niji'
+    NeoBundle 'guns/vim-clojure-static'        "Clojure mode
     NeoBundle 'clojure-emacs/cider-nrepl'
     NeoBundle 'tpope/vim-fireplace'
     NeoBundle 'tpope/vim-classpath'
-    "NeoBundle 'tpope/vim-leiningen'
+    NeoBundle 'losingkeys/vim-niji'
+    NeoBundle 'tpope/vim-leiningen'
 
     """ Plugins -> Not yet..
-    "NeoBundle 'Shougo/unite.vim'
-    "NeoBundle 'Shougo/vimproc'
-    "NeoBundle 'Shougo/vimshell'
-    "NeoBundle 'Shougo/neocomplcache'
     "NeoBundle 'davidhalter/jedi-vim'
     
     call neobundle#end()
@@ -59,6 +65,7 @@ if version >= 702
         echomsg 'Please execute ":NeoBundleInstall" command.'
     endif
 endif    
+
 
 "-------------------------------------------------------------------------
 " GUI Settings
@@ -129,7 +136,6 @@ set softtabstop=4
 set expandtab
 set smartindent
 set smarttab
-"let g:indentLine_faster = 1
 
 """ line
 set display=lastline
@@ -148,7 +154,7 @@ set noswapfile
 set hidden
 
 """ vimgrep
-set wildignore=*.o,*.obj,*.exe,*.class,*.jar,*.zip,*.gz,*.bz2
+set wildignore=*.o,*.obj,*.exe,*.class,*.jar,*.zip,*.gz,*.bz2,*.zip
 let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git'
 let Grep_Cygwin_Find = 1
 
@@ -214,6 +220,35 @@ endif
 
 
 "-------------------------------------------------------------------------
+" Common Key Settings
+"---------------------------------------------------------------------------
+""" map leader
+let mapleader = ","
+let g:mapleader = ","
+
+""" general
+noremap  j    gj
+noremap  k    gk
+vnoremap j    gj
+vnoremap k    gk
+
+""" buffer switch
+map <C-l>    <ESC>:bn<CR>
+map <C-h>    <ESC>:bp<CR>
+
+""" multiwindow switch
+map <C-down>     <C-W>j
+map <C-up>       <C-W>k
+map <C-left>     <C-W>h
+map <C-right>    <C-W>l
+
+""" quickfix(vimgrep, make, etc...)
+au QuickfixCmdPost make,grep,grepadd,vimgrep copen
+map <C-j>    <ESC>:cn<CR>
+map <C-k>    <ESC>:cp<CR>
+
+
+"-------------------------------------------------------------------------
 " Plugin Settings
 "---------------------------------------------------------------------------
 """ scrooloose/syntastic
@@ -225,42 +260,11 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-
-"-------------------------------------------------------------------------
-" Key Settings
-"---------------------------------------------------------------------------
-""" map leader
-let mapleader = ","
-let g:mapleader = ","
-
-""" general
-noremap j gj
-noremap k gk
-vnoremap j gj
-vnoremap k gk
-
-""" buffer switch
-map <C-l>    <ESC>:bn<CR>
-map <C-h>    <ESC>:bp<CR>
-
-""" multiwindow switch
-map <C-down>   <C-W>j
-map <C-up>     <C-W>k
-map <C-left>   <C-W>h
-map <C-right>  <C-W>l
-
-""" quickfix(vimgrep, make, etc...)
-au QuickfixCmdPost make,grep,grepadd,vimgrep copen
-map <C-j> <ESC>:cn<CR>
-map <C-k>   <ESC>:cp<CR>
-
-""" ctags
-let Tlist_WinWidth = 25
-map <F7> :TlistToggle<CR>
-map <F8> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-
-""" language-specific
-autocmd FileType python :nmap <F5> :w<CR>:!python %<CR>
-autocmd FileType perl :nmap <F5> :w<CR>:!perl %<CR>
-
+""" vim-scripts/gtags.vim
+"    - 'gtags -v' will generate GLOBAL tags
+" gg=Grep, gl=FuncList, gd=FuncDef, gf=FuncRef
+nmap <leader>gg    :Gtags -g
+nmap <leader>gl    :Gtags -f %<CR>              
+nmap <leader>gd    :Gtags <C-r><C-w><CR>
+nmap <leader>gr    :Gtags -r <C-r><C-w><CR>
 
