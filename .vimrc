@@ -43,12 +43,18 @@ if version >= 702
     NeoBundle 'mileszs/ack.vim'                "App::Ack
 
     """ Plugins -> Clojure
-    NeoBundle 'guns/vim-clojure-static'        "Clojure mode
-    NeoBundle 'clojure-emacs/cider-nrepl'
-    NeoBundle 'tpope/vim-fireplace'
-    NeoBundle 'tpope/vim-classpath'
-    NeoBundle 'losingkeys/vim-niji'
-    NeoBundle 'tpope/vim-leiningen'
+    "NeoBundle 'guns/vim-clojure-static'        "Clojure mode
+    "NeoBundle 'clojure-emacs/cider-nrepl'
+    "NeoBundle 'tpope/vim-fireplace'
+    "NeoBundle 'tpope/vim-classpath'
+    "NeoBundle 'losingkeys/vim-niji'
+    "NeoBundle 'tpope/vim-leiningen'
+
+    """ Plugins -> Markdown
+    NeoBundle 'plasticboy/vim-markdown'
+    NeoBundle 'kannokanno/previm'
+    NeoBundle 'tyru/open-browser.vim'
+
 
     """ Plugins -> Not yet..
     "NeoBundle 'davidhalter/jedi-vim'
@@ -77,7 +83,7 @@ if has("gui_running")
     
     """ font
     if has("win32")
-        set guifont=Ricty_Diminished:h12:cSHIFTJIS  " Use font-link for multibyte fonts
+        set guifont=MyricaM_M:h12:cSHIFTJIS  " Use font-link for multibyte fonts
     endif
     
     """cursor color
@@ -157,6 +163,9 @@ set hidden
 set wildignore=*.o,*.obj,*.exe,*.class,*.jar,*.zip,*.gz,*.bz2,*.zip
 let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git'
 let Grep_Cygwin_Find = 1
+
+""" file extension
+au BufRead,BufNewFile *.md set filetype=markdown
 
 
 "-------------------------------------------------------------------------
