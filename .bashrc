@@ -27,6 +27,9 @@ fi
 ### PATH
 export PATH=~/bin:$PATH
 
+### Prompt
+export PS1="[\u@\h]$ "
+
 ### History
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
@@ -78,6 +81,12 @@ fi
 # Alias Settings
 ##################################################
 alias tmux='TERM=xterm-256color tmux'
+
+
+##################################################
+# Subversion Settings
+##################################################
+export SVN_EDITOR=vim
 
 
 ##################################################
