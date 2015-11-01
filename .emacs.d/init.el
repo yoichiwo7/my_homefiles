@@ -2,7 +2,7 @@
 ;; General Settings
 ;;----------------------------------------
 ; hide menu-bar and tool-bar
-(menu-bar-mode -1)
+;(menu-bar-mode -1)
 (tool-bar-mode -1)
 
 ; show line number
@@ -23,6 +23,20 @@
 ; save cursor
 (require 'saveplace)
 (setq-default save-place t)
+
+
+;;----------------------------------------
+;; Key Settings
+;;----------------------------------------
+;; Ctrl + up/down
+;; -> jump through results of grep, erros, etc..
+(global-set-key (kbd "<C-down>") 'next-error)
+(global-set-key (kbd "<C-up>") 'previous-error)
+
+;; Ctrl + left/right
+;; -> swtich to next/previous buffers
+(global-set-key (kbd "<C-right>") 'next-buffer)
+(global-set-key (kbd "<C-left>") 'previous-buffer)
 
 
 ;;----------------------------------------
@@ -94,8 +108,31 @@
 
 
 ;;----------------------------------------
-;; Neotree Settings (evilmode)
+;; Neotree Settings
 ;;----------------------------------------
 (require 'neotree)
 ; toggle with F8
 (global-set-key [f8] 'neotree-toggle)
+
+
+;;----------------------------------------
+;; grep Settings (evilmode)
+;;----------------------------------------
+;; recursive grep
+(require 'grep)
+(setq grep-command-before-query "grep -nH -r -e ")
+(defun grep-default-command ()
+  (if current-prefix-arg
+    (let ((grep-command-before-target
+            (concat grep-command-before-query
+                    (shell-quote-argument (grep-tag-default)))))
+      (cons (if buffer-file-name
+              (concat grep-command-before-target
+                      " *."
+                      (file-name-extension buffer-file-name))
+              (concat grep-command-before-target " ."))
+            (+ (length grep-command-before-target) 1)))
+    (car grep-command)))
+(setq grep-command (cons (concat grep-command-before-query " .")
+                         (+ (length grep-command-before-query) 1)))
+
