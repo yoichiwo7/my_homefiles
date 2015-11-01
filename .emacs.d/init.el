@@ -1,26 +1,40 @@
 ;;----------------------------------------
 ;; General Settings
 ;;----------------------------------------
-; hide menu-bar and tool-bar
+;; hide menu-bar and tool-bar
 ;(menu-bar-mode -1)
 (tool-bar-mode -1)
 
-; show line number
+;; show line number
 (global-linum-mode t)
-(setq linum-format "%4d  ")
+(setq linum-format "%4d")
+(set-face-attribute 'linum nil
+                    :foreground "#800"
+                    :height 0.9)
 
-; highlight matched parences
+;; highlight matched parences
 (show-paren-mode 1)
 ;(setq show-paren-style 'mixed)
 
-; highlight current line
-;(global-hl-line-mode)
+;; highlight current line
+(defface hlline-face
+  '((((class color)
+      (background dark))
+     (:background "dark slate gray"))
+    (((class color)
+      (background light))
+     (:background "ForestGreen"))
+    (t
+     ()))
+  "*Face used by hl-line.")
+(setq hl-line-face 'hlline-face)
+(global-hl-line-mode)
 
-; no backups, remove autosaves
+;; no backups, remove autosaves
 (setq backup-inhibited t)
 (setq delete-auto-save-files t)
 
-; save cursor
+;; save cursor
 (require 'saveplace)
 (setq-default save-place t)
 
@@ -44,6 +58,27 @@
 ;;----------------------------------------
 (load-theme 'wombat t)
 
+
+;;----------------------------------------
+;; Font Settings
+;; ex. "源ノ角ゴシック Code JP R", "Ricty", "MyricaM M"
+;;----------------------------------------
+(setq myfontname-win "源ノ角ゴシック Code JP R")
+(setq myfontname-mac "Ricty")
+
+(let ((ws window-system))
+  (cond ((eq ws 'w32)
+	 ; Windows Font 
+	 (set-face-attribute 'default nil
+			     :family myfontname-win
+			     :height 100)
+	 (set-fontset-font nil 'japanese-jisx0208 (font-spec :family myfontname-win)))
+	((eq ws 'ns)
+	 ; Mac OSX Font
+	 (set-face-attribute 'default nil
+			     :family myfontname-mac
+			     :height 100)
+	 (set-fontset-font nil 'japanese-jisx0208 (font-spec :family myfontname-mac)))))
 
 ;;----------------------------------------
 ;; Japanese Settings
