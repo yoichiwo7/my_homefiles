@@ -54,6 +54,14 @@
 
 
 ;;----------------------------------------
+;; Key Settings
+;;----------------------------------------
+;; Enable mouse in terminal
+(xterm-mouse-mode t)
+(mouse-wheel-mode t)
+
+
+;;----------------------------------------
 ;; Color Settings
 ;;----------------------------------------
 (load-theme 'wombat t)
