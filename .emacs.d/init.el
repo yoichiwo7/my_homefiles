@@ -82,6 +82,7 @@
 
 ;; no backups, remove autosaves
 (setq backup-inhibited t)
+(setq make-backup-files nil)
 (setq delete-auto-save-files t)
 
 ;; save cursor
