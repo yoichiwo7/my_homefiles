@@ -5,12 +5,13 @@
 
 ; add package URLS
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-;(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
 ; no auto startup for packages
 (setq package-enable-at-startup nil)
 
+;; Auto package install
 (defun ensure-package-installed (&rest packages)
   "Assure every package is installed, ask for installation if it's not.
   Return a list of installed packages or nil for every skipped package."
@@ -22,29 +23,54 @@
           (package-install package)
           package)))
     packages))
-
-;; Make sure to have downloaded archive description.
+; Make sure to have downloaded archive description.
 (or (file-exists-p package-user-dir)
     (package-refresh-contents))
-
-;; Activate installed packages
+; Activate installed packages
 (package-initialize)
-
-;; Check and install packages
+; Check and install packages
 (ensure-package-installed 
-    'ag
-    'auto-complete
-    'helm
-    'evil
+
+    ;; Checker
     'flycheck
-    ;'magit
-    'neotree
-    'org
-    'projectile
-    'powerline
-    'solarized-theme
-    'undo-tree
+
+    ;; Completion, Snippet
+    'auto-complete
     'yasnippet
+
+    ;; Navigation
+    'helm
+    'helm-ag
+    'helm-gtags
+    'helm-projectile
+    'neotree
+    'projectile
+
+    ;; Searching
+    'ag
+
+    ;; Tags
+    'ggtags
+
+    ;; Version control
+    ;'magit
+
+    ;; Vim emulation
+    'evil
+
+    ;; Elisp library
+    'dash              ; List API (https://github.com/magnars/dash.el)
+    's                 ; String API (https://github.com/magnars/s.el)
+    'f                 ; File,Directory API (https://github.com/rejeep/f.el)
+    'ht                ; Hashtable API (https://github.com/Wilfred/ht.el)
+
+    ;; Others (not categorized yet)
+    'clojure-mode
+    ;'python-mode
+    ;'markdown-mode
+    'org
+    'powerline
+    'undo-tree
     )
 
 
@@ -164,6 +190,15 @@
 ;; Move wrapped lines
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+;; Esc quits
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
 
 ;;----------------------------------------
