@@ -116,8 +116,10 @@
 (setq-default save-place t)
 
 ;; space, tab
-(setq-default tab-width 4 indent-tabs-mode nil)
-(setq-default c-basic-offset 4 c-default-style "bsd")
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq-default c-basic-offset 4)
+(setq-default c-default-style "bsd")
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 
@@ -146,6 +148,7 @@
 ;;----------------------------------------
 ;; Color Settings
 ;;----------------------------------------
+(global-font-lock-mode 1)
 (load-theme 'wombat t)
 
 
@@ -156,20 +159,21 @@
 (setq myfont-name-win "MyricaM M")
 ;(setq myfont-name-win "源ノ角ゴシック Code JP R")
 (setq myfont-name-mac "Ricty")
-(setq myfont-height 100)
+(setq myfont-height-win 100)
+(setq myfont-height-mac 120)
 
 (let ((ws window-system))
   (cond ((eq ws 'w32)
 	 ; Windows Font 
 	 (set-face-attribute 'default nil
 			     :family myfont-name-win
-			     :height myfont-height))
+			     :height myfont-height-win))
 	 ;(set-fontset-font nil 'japanese-jisx0208 (font-spec :family myfont-name-win)))
 	((eq ws 'ns)
 	 ; Mac OSX Font
 	 (set-face-attribute 'default nil
 			     :family myfont-name-mac
-			     :height myfont-height))))
+			     :height myfont-height-mac))))
 	 ;(set-fontset-font nil 'japanese-jisx0208 (font-spec :family myfont-name-mac)))))
 
 
@@ -178,7 +182,6 @@
 ;;----------------------------------------
 (set-language-environment 'Japanese)
 (prefer-coding-system 'utf-8)
-
 
 
 ;;----------------------------------------
@@ -242,8 +245,21 @@
 ;;----------------------------------------
 ;; Python Settings
 ;;----------------------------------------
+;; Interpreter
 (let ((ws window-system))
   ; Windows setting
   (cond ((eq ws 'w32)
     (setq python-shell-interpreter "ipython"))))
     ;(setq python-shell-interpreter "python2.7"))))
+
+;; REPL
+(defun my-python-f5 ()
+  (interactive)
+  (python-shell-send-buffer)
+  (python-shell-switch-to-shell)
+  )
+(eval-after-load "python"
+  '(progn
+     (define-key python-mode-map (kbd "<f5>") 'my-python-f5)
+     (define-key python-mode-map (kbd "C-h f") 'python-eldoc-at-point)
+     ))
