@@ -1,0 +1,2 @@
+# -D option below enables arrow keys on groovysh
+groovysh -Djline.terminal=none
