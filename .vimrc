@@ -1,13 +1,13 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" .vimrc (yoichiwo7)
+" .vimrc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "-------------------------------------------------------------------------
 " Plugins (managing via NeoBundle)
 "   - vim7.2.051 or above
 "---------------------------------------------------------------------------
 if version >= 702
-    set nocompatible               " Be iMproved
-    filetype off                   " Required!
+    set nocompatible
+    filetype off
     
     if has('vim_starting')
         if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
