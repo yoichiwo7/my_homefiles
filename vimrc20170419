@@ -1,0 +1,305 @@
+"-------------------------------------------------------------------------
+" Initialization
+"  - Use python3 as defalut python for vim.
+"-------------------------------------------------------------------------
+set nocompatible
+echom "Loading python3/dyn as default."
+python3 import vim
+
+"-------------------------------------------------------------------------
+" Plugins Management (managing via dein.vim)
+" Install dein as followings:
+"    $ mkdir -p ~/.vim/dein/repos/github.com/Shougo/dein.vim
+"    $ cd ~/.vim/dein/repos/github.com/Shougo
+"    $ git clone https://github.com/Shougo/dein.vim.git
+"---------------------------------------------------------------------------
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+call dein#begin(expand("~/.vim/dein"))
+
+    " Plugin Management
+    call dein#add("Shougo/dein.vim")
+
+    " Color Scheme
+    call dein#add("tomasr/molokai")
+
+    " Display
+    call dein#add("vim-scripts/gtags.vim")
+    call dein#add("scrooloose/nerdtree")
+    call dein#add("itchyny/lightline.vim")
+    call dein#add("Yggdroot/indentLine")
+    
+    " Navigation
+    call dein#add("Shougo/denite.nvim")
+    call dein#add("vim-scripts/gtags.vim")
+    call dein#add("ctrlpvim/ctrlp.vim")  "TODO:denite.nvim is enough?
+    "call dein#add("mileszs/ack.vim")
+
+    " Code Edting
+    call dein#add("junegunn/vim-easy-align")
+    call dein#add("terryma/vim-multiple-cursors")
+
+    " Code Completion
+    "call dein#add("Shougo/neocomplete.vim")
+    
+    " Code Check
+    call dein#add("w0rp/ale")
+
+    " Version Control
+    call dein#add("tpope/vim-fugitive")
+    call dein#add("airblade/vim-gitgutter")
+
+    "------------------------------
+    " Language Specific
+    "------------------------------
+    " Go
+    call dein#add("fatih/vim-go")
+
+    " Markdown
+    call dein#add("plasticboy/vim-markdown")
+    call dein#add("iamcco/markdown-preview.vim")
+
+    " Python
+    call dein#add("davidhalter/jedi-vim")
+
+call dein#end()
+
+filetype plugin indent on
+syntax enable
+
+" Install 
+if dein#check_install()
+    call dein#install()
+endif
+
+
+"-------------------------------------------------------------------------
+" GUI Settings
+"---------------------------------------------------------------------------
+if has("gui_running")
+    """ general
+    lan mes en_US
+    set guioptions-=T
+    
+    """ font
+    if has("win32")
+        set guifont=MyricaM_M:h12:cSHIFTJIS  " Use font-link for multibyte fonts
+    endif
+    
+    """cursor color
+    if has('multi_byte_ime')
+        hi Cursor guifg=bg guibg=Yellow gui=NONE
+        hi CursorIM guifg=NONE guibg=Red gui=NONE
+    endif
+
+    """ cursor
+    set cursorline
+endif
+
+
+"-------------------------------------------------------------------------
+" General Settings
+"---------------------------------------------------------------------------
+syntax on
+set nocompatible
+
+""" color scheme
+colorscheme desert " default
+    colorscheme molokai
+if has("gui_running")
+    " disable italic font in GUI mode
+    hi StatusLine gui=none
+    hi Comment    gui=none
+    hi String     gui=none
+else
+    set t_Co=256
+    let g:rehash256 = 1
+endif
+
+""" vim-cmd
+set shellslash
+set showmatch
+set showcmd
+set wildmenu
+set wildmode=full:list
+
+""" formats
+set backspace=indent,eol,start
+set formatoptions+=m
+
+""" status line
+set laststatus=2
+set statusline=%<%F\ %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B)\ %l/%L(%P)%m
+
+""" sound 
+set noerrorbells
+set novisualbell
+set t_vb=
+
+""" tab, indent
+set ts=4 sw=4
+set softtabstop=4
+set expandtab
+set smartindent
+set smarttab
+
+""" line
+set display=lastline
+
+""" search
+set incsearch
+set nowrapscan
+set ignorecase
+set smartcase        " If first char is capital, don't ignorecase
+set hlsearch
+
+""" backup, temp files
+set nobackup
+set autoread
+set noswapfile
+set hidden
+
+""" vimgrep
+set wildignore=*.o,*.obj,*.exe,*.class,*.jar,*.zip,*.gz,*.bz2,*.zip
+let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git'
+let Grep_Cygwin_Find = 1
+
+""" file extension
+au BufRead,BufNewFile *.md set filetype=markdown
+
+
+"-------------------------------------------------------------------------
+" Japanese Settings
+"---------------------------------------------------------------------------
+set iminsert=0
+set imsearch=0
+if &encoding !=# 'utf-8'
+    set encoding=japan
+    set fileencoding=japan
+endif
+if has('iconv')
+    let s:enc_euc = 'euc-jp'
+    let s:enc_jis = 'iso-2022-jp'
+    " check if iconv supports eucJP-ms
+    if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
+        let s:enc_euc = 'eucjp-ms'
+        let s:enc_jis = 'iso-2022-jp-3'
+    " check if iconv supports JISX0213
+    elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+        let s:enc_euc = 'euc-jisx0213'
+        let s:enc_jis = 'iso-2022-jp-3'
+    endif
+    " build fileencodings
+    if &encoding ==# 'utf-8'
+        let s:fileencodings_default = &fileencodings
+        let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
+        let &fileencodings = &fileencodings .','. s:fileencodings_default
+        unlet s:fileencodings_default
+    else
+        let &fileencodings = &fileencodings .','. s:enc_jis
+        set fileencodings+=utf-8,ucs-2le,ucs-2
+        if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
+            set fileencodings+=cp932
+            set fileencodings-=euc-jp
+            set fileencodings-=euc-jisx0213
+            set fileencodings-=eucjp-ms
+            let &encoding = s:enc_euc
+            let &fileencoding = s:enc_euc
+        else
+            let &fileencodings = &fileencodings .','. s:enc_euc
+        endif
+    endif
+    " relase constant
+    unlet s:enc_euc
+    unlet s:enc_jis
+endif
+" use 'encoding' as fileencoding if no there is no japanese
+if has('autocmd')
+    function! AU_ReCheck_FENC()
+        if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+            let &fileencoding=&encoding
+        endif
+    endfunction
+    autocmd BufReadPost * call AU_ReCheck_FENC()
+endif
+set fileformats=unix,dos,mac
+if exists('&ambiwidth')
+    set ambiwidth=double
+endif
+
+
+"-------------------------------------------------------------------------
+" Common Key Settings
+"---------------------------------------------------------------------------
+""" map leader
+let mapleader = ","
+let g:mapleader = ","
+
+""" general
+noremap  j    gj
+noremap  k    gk
+vnoremap j    gj
+vnoremap k    gk
+
+""" buffer switch
+map <C-l>    <ESC>:bn<CR>
+map <C-h>    <ESC>:bp<CR>
+
+""" multiwindow switch
+map <C-down>     <C-W>j
+map <C-up>       <C-W>k
+map <C-left>     <C-W>h
+map <C-right>    <C-W>l
+
+""" quickfix(vimgrep, make, etc...)
+au QuickfixCmdPost make,grep,grepadd,vimgrep copen
+map <C-j>    <ESC>:cn<CR>
+map <C-k>    <ESC>:cp<CR>
+
+
+
+"-------------------------------------------------------------------------
+"-------------------------------------------------------------------------
+" Plugin Specific Settings
+"---------------------------------------------------------------------------
+"-------------------------------------------------------------------------
+""" vim-scripts/gtags.vim
+"    - 'gtags -v' will generate GLOBAL tags
+" gg=Grep, gl=FuncList, gd=FuncDef, gf=FuncRef
+nmap <leader>gg    :Gtags -g
+nmap <leader>gl    :Gtags -f %<CR>              
+nmap <leader>gd    :Gtags <C-r><C-w><CR>
+nmap <leader>gr    :Gtags -r <C-r><C-w><CR>
+
+
+""" indentLine
+let g:indentLine_enabled = 1
+
+""" vim-easy-align
+"---------
+" = Around the 1st occurrences
+" 2= Around the 2nd occurrences
+" *= Around all occurrences
+" **= Left/Right alternating alignment around all occurrences
+" <Enter> Switching between left/right/center alignment modes
+"---------
+xmap <leader>ea <Plug>(EasyAlign)
+nmap <leader>ea <Plug>(EasyAlign)
+
+
+""" ale
+let g:ale_sign_column_always = 1
+" custom linter checker
+let g:ale_linters = {
+\   'ansible':    ['ansible-lint'],
+\   'c':          ['clang'],
+\   'cpp':        ['clang'],
+\   'dockerfile': ['hadolint'],
+\   'go':         ['golint'],
+\   'json':       ['jsonlint'],
+\   'lua':        ['luacheck'],
+\   'python':     ['flake8', 'mypy'],
+\   'sh':         ['shellcheck'],
+\   'vim':        ['vint'],
+\   'yaml':       ['yamlint'],
+\}
