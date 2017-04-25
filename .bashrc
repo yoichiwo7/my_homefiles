@@ -68,13 +68,10 @@ alias la='ls -A'
 alias l='ls -CF'
 
 ### bash-completion
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
+[ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+[ -f /etc/bash_completion ] && . /etc/bash_completion
+# Mac OSX(homebrew)
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
 
 ##################################################
@@ -93,7 +90,7 @@ export SVN_EDITOR=vim
 # Git Settings
 ##################################################
 if which git &>/dev/null; then
-    git config --global user.name "Yoichi Iwaki"
+    git config --global user.name "yoichiwo7"
     git config --global user.email "yoichiwo7@gmail.com"
     git config --global color.ui auto
     git config --global core.excludesfile ~/.gitignore
