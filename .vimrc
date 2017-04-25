@@ -1,76 +1,84 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" .vimrc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "-------------------------------------------------------------------------
-" Plugins (managing via NeoBundle)
-"   - vim7.2.051 or above
+" Version Check
+"  - Works only on v8.0 or later.
+"-------------------------------------------------------------------------
+if version < 800
+    finish
+endif
+
+"-------------------------------------------------------------------------
+" Initialization
+"  - Use python3 as defalut python for vim.
+"-------------------------------------------------------------------------
+set nocompatible
+" use python3 as default
+python3 import vim
+
+"-------------------------------------------------------------------------
+" Plugins Management (managing via dein.vim)
+" Install dein as followings:
+"    $ mkdir -p ~/.vim/dein/repos/github.com/Shougo/dein.vim
+"    $ cd ~/.vim/dein/repos/github.com/Shougo
+"    $ git clone https://github.com/Shougo/dein.vim.git
 "---------------------------------------------------------------------------
-if version >= 702
-    set nocompatible
-    filetype off
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+call dein#begin(expand("~/.vim/dein"))
+
+    " Plugin Management
+    call dein#add("Shougo/dein.vim")
+
+    " Color Scheme
+    call dein#add("tomasr/molokai")
+
+    " Display
+    call dein#add("vim-scripts/gtags.vim")
+    call dein#add("scrooloose/nerdtree")
+    call dein#add("itchyny/lightline.vim")
+    call dein#add("Yggdroot/indentLine")
     
-    if has('vim_starting')
-        if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
-            " Auto install Neobudle
-            echo "auto-install neobundle..."
-            :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
-        endif
-        set runtimepath+=$HOME/.vim/bundle/neobundle.vim
-        call neobundle#begin(expand('$HOME/.vim/bundle'))
-    endif
+    " Navigation
+    call dein#add("Shougo/denite.nvim")
+    call dein#add("vim-scripts/gtags.vim")
+    call dein#add("ctrlpvim/ctrlp.vim")  "TODO:denite.nvim is enough?
+    "call dein#add("mileszs/ack.vim")
+
+    " Code Edting
+    call dein#add("junegunn/vim-easy-align")
+    call dein#add("terryma/vim-multiple-cursors")
+
+    " Code Completion
+    "call dein#add("Shougo/neocomplete.vim")
     
-    """ Neobundle(Base)
-    NeoBundle 'Shougo/neobundle.vim'
-    
-    """ Plugins -> Filer
-    NeoBundle 'scrooloose/nerdtree'
+    " Code Check
+    call dein#add("w0rp/ale")
 
-    """ Plugins -> Syntax check
-    NeoBundle 'scrooloose/syntastic'
+    " Version Control
+    call dein#add("tpope/vim-fugitive")
+    call dein#add("airblade/vim-gitgutter")
 
-    """ Plugins -> Display
-    NeoBundle 'vim-scripts/Wombat'
-    NeoBundle 'vim-scripts/wombat256.vim'
+    "------------------------------
+    " Language Specific
+    "------------------------------
+    " Go
+    call dein#add("fatih/vim-go")
 
-    """ Plugins -> Fuzzy access
-    NeoBundle 'kien/ctrlp.vim'
+    " Markdown
+    call dein#add("plasticboy/vim-markdown")
+    call dein#add("iamcco/markdown-preview.vim")
 
-    """ Plugins -> Version Control
-    NeoBundle 'tpope/vim-fugitive'             "Git
+    " Python
+    call dein#add("davidhalter/jedi-vim")
 
-    """ Plugins -> Source Navigation
-    NeoBundle 'vim-scripts/gtags.vim'          "GLOBAL
-    NeoBundle 'mileszs/ack.vim'                "App::Ack
+call dein#end()
 
-    """ Plugins -> Clojure
-    "NeoBundle 'guns/vim-clojure-static'        "Clojure mode
-    "NeoBundle 'clojure-emacs/cider-nrepl'
-    "NeoBundle 'tpope/vim-fireplace'
-    "NeoBundle 'tpope/vim-classpath'
-    "NeoBundle 'losingkeys/vim-niji'
-    "NeoBundle 'tpope/vim-leiningen'
+filetype plugin indent on
+syntax enable
 
-    """ Plugins -> Markdown
-    NeoBundle 'plasticboy/vim-markdown'
-    NeoBundle 'kannokanno/previm'
-    NeoBundle 'tyru/open-browser.vim'
-
-
-    """ Plugins -> Not yet..
-    "NeoBundle 'davidhalter/jedi-vim'
-    
-    call neobundle#end()
-    
-    filetype plugin indent on     " Required!
-    syntax on
-    
-    " Installation check.
-    if neobundle#exists_not_installed_bundles()
-        echomsg 'Not installed bundles : ' .
-            \ string(neobundle#get_not_installed_bundle_names())
-        echomsg 'Please execute ":NeoBundleInstall" command.'
-    endif
-endif    
+" Install 
+if dein#check_install()
+    call dein#install()
+endif
 
 
 "-------------------------------------------------------------------------
@@ -78,7 +86,7 @@ endif
 "---------------------------------------------------------------------------
 if has("gui_running")
     """ general
-    lan mes en
+    lan mes en_US
     set guioptions-=T
     
     """ font
@@ -105,15 +113,15 @@ set nocompatible
 
 """ color scheme
 colorscheme desert " default
+    colorscheme molokai
 if has("gui_running")
-    colorscheme wombat
     " disable italic font in GUI mode
     hi StatusLine gui=none
     hi Comment    gui=none
     hi String     gui=none
 else
     set t_Co=256
-    colorscheme wombat256mod
+    let g:rehash256 = 1
 endif
 
 """ vim-cmd
@@ -146,14 +154,14 @@ set smarttab
 """ line
 set display=lastline
 
-""" searh
+""" search
 set incsearch
 set nowrapscan
 set ignorecase
 set smartcase        " If first char is capital, don't ignorecase
 set hlsearch
 
-""" file-related
+""" backup, temp files
 set nobackup
 set autoread
 set noswapfile
@@ -257,23 +265,64 @@ map <C-j>    <ESC>:cn<CR>
 map <C-k>    <ESC>:cp<CR>
 
 
-"-------------------------------------------------------------------------
-" Plugin Settings
-"---------------------------------------------------------------------------
-""" scrooloose/syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
 
+"-------------------------------------------------------------------------
+" Plugin Specific Settings
+"-------------------------------------------------------------------------
+"
 """ vim-scripts/gtags.vim
-"    - 'gtags -v' will generate GLOBAL tags
+"---------
+" 'gtags -v' will generate GLOBAL tags
 " gg=Grep, gl=FuncList, gd=FuncDef, gf=FuncRef
+"---------
 nmap <leader>gg    :Gtags -g
 nmap <leader>gl    :Gtags -f %<CR>              
 nmap <leader>gd    :Gtags <C-r><C-w><CR>
 nmap <leader>gr    :Gtags -r <C-r><C-w><CR>
 
+
+""" indentLine
+let g:indentLine_enabled = 1
+
+
+""" vim-easy-align
+"---------
+" = Around the 1st occurrences
+" 2= Around the 2nd occurrences
+" *= Around all occurrences
+" **= Left/Right alternating alignment around all occurrences
+" <Enter> Switching between left/right/center alignment modes
+"---------
+xmap <leader>ea <Plug>(EasyAlign)
+nmap <leader>ea <Plug>(EasyAlign)
+
+
+""" ale
+let g:ale_sign_column_always = 1
+" custom linter checker
+let g:ale_linters = {
+\   'ansible':    ['ansible-lint'],
+\   'c':          ['clang'],
+\   'cpp':        ['clang'],
+\   'dockerfile': ['hadolint'],
+\   'go':         ['golint'],
+\   'json':       ['jsonlint'],
+\   'lua':        ['luacheck'],
+\   'python':     ['flake8', 'mypy'],
+\   'sh':         ['shellcheck'],
+\   'vim':        ['vint'],
+\   'yaml':       ['yamlint'],
+\}
+
+
+""" vim-markdown
+let g:vim_markdown_folding_disabled = 1
+
+
+""" markdown-preview
+"--------------------
+" :MarkdownPreview
+" :MarkdownPreviewStop
+"--------------------
+let g:mkdp_path_to_chrome = "open -a 'Google Chrome'"
+let g:mkdp_refresh_slow = 1
