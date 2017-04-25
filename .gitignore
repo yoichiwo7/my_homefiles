@@ -1,0 +1,23 @@
+#-------------------------------
+# Blacklist top level folder
+#-------------------------------
+/*
+
+#-------------------------------
+# Whitelist files & folders
+#-------------------------------
+!.gitignore
+
+!README.md
+
+!.bashrc
+!.vimrc
+!.tmux.conf
+
+
+# Example for directory
+!bin/
+bin/*
+
+!script/
+script/*
