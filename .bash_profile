@@ -98,6 +98,11 @@ if which git &>/dev/null; then
     git config --global core.editor vim
 fi
 
+##################################################
+# Docker Settings
+##################################################
+export DOCKER_HOST='tcp://0.0.0.0:2375'
+
 
 ##################################################
 # Python Settings
