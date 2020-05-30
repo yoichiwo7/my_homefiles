@@ -28,7 +28,13 @@ fi
 export PATH=~/bin:$PATH
 
 ### Prompt
-export PS1="[\u@\h]$ "
+# k8s (requires kube-ps.sh)
+export KUBE_PS1_SYMBOL_DEFAULT="🐳"
+source ~/kube-ps1.sh
+# git (requires git-prompt.sh)
+source ~/git-prompt.sh
+# prompt format settings
+export PS1='[\u@\h \W $(kube_ps1)$(__git_ps1 "(%s)")]\$ '
 
 ### History
 # don't put duplicate lines or lines starting with space in the history.
@@ -36,8 +42,8 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=2000
-HISTFILESIZE=3000
+HISTSIZE=5000
+HISTFILESIZE=20000
 
 ### Windows Size
 # check the window size after each command and, if necessary,
@@ -81,12 +87,6 @@ alias tmux='TERM=xterm-256color tmux'
 
 
 ##################################################
-# Subversion Settings
-##################################################
-export SVN_EDITOR=vim
-
-
-##################################################
 # Git Settings
 ##################################################
 if which git &>/dev/null; then
@@ -97,22 +97,3 @@ if which git &>/dev/null; then
     git config --global core.autocrlf false
     git config --global core.editor vim
 fi
-
-##################################################
-# Docker Settings
-##################################################
-export DOCKER_HOST='tcp://0.0.0.0:2375'
-
-
-##################################################
-# Python Settings
-##################################################
-### pyenv
-export PYENV_ROOT="${HOME}/.pyenv"
-if [ -d "${PYENV_ROOT}" ]; then
-    export PATH="${PYENV_ROOT}/bin:${PATH}"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-
-fi
-
